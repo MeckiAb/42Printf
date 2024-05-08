@@ -22,4 +22,8 @@ fclean: clean
 
 re: fclean all
 
+test: $(NAME)
+	cc $(NAME) main.c
+	./a.out
+
 .PHONY : all clean fclean re
