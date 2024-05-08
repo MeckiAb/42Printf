@@ -2,7 +2,13 @@ NAME = libftprintf.a
 CC = cc -Wall -Wextra -Werror
 AR = ar -csr
 
-SRC = ft_printf.c
+SRC = ft_printf.c \
+print_char.c \
+print_str.c \
+print_nbr.c \
+print_unbr.c \
+print_hex.c \
+print_ptr.c
 
 OBJ = $(SRC:%.c=%.o)
 

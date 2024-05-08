@@ -10,107 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include "ft_printf.h"
-
-static int	print_nbr(int n, int *i)
-{
-	char	c;
-
-	if (n == -2147483648)
-	{
-		write(1, "-2147483648", 11);
-		*i += 11;
-	}
-	else if (n < 0)
-	{
-		write(1, "-", 1);
-		*i = print_nbr(-n, i) + 1;
-	}
-	else if (n > 9)
-	{
-		*i = print_nbr(n / 10, i) + 1;
-		c = n % 10 + '0';
-		write(1, &c, 1);
-	}
-	else
-	{
-		c = n % 10 + '0';
-		write(1, &c, 1);
-		*i = *i + 1;
-	}
-	return (*i);
-}
-
-static int	print_unbr(unsigned int n, int *i)
-{
-	char	c;
-
-	if (n > 9)
-	{
-		*i = print_unbr(n / 10, i) + 1;
-		c = n % 10 + '0';
-		write(1, &c, 1);
-	}
-	else
-	{
-		c = n % 10 + '0';
-		write(1, &c, 1);
-		*i = *i + 1;
-	}
-	return (*i);
-}
-
-static int	print_hex(unsigned int n, int *i, char h)
-{
-	char	c;
-
-	if (n > 15)
-	{
- 		*i = print_hex(n / 16, i, h) + 1;
-		n = n % 16;
-		if (n < 10)
-			c = n + '0';
-		else
-			c = n + h - 10;
-		write(1, &c, 1);
-	}
-	else
-	{
-		n = n % 16;
-		if (n < 10)
-			c = n + '0';
-		else
-			c = n + h - 10;
-		write(1, &c, 1);
-		(*i)++;
-	}
-	return (*i);
-}
-
-static int	print_str(char *s, int i)
-{
-	int	cnt;
-
-	cnt = 0;
-	while (s[cnt])
-	{
-		write(1, &s[cnt++], 1);
-		i++;
-	}
-	return (i);
-}
-
-static int	print_char(int c, int i)
-{
-	unsigned char	aux;
-
-	aux = (unsigned char)c;
-	write(1, &aux, 1);
-	return (i + 1);
-}
+#include <stdarg.h>
+#include <unistd.h>
 
 static int	print_token(char const *s, va_list ap, int i)
 {
@@ -129,7 +31,7 @@ static int	print_token(char const *s, va_list ap, int i)
 	else if (*s == 'p')
 	{
 		write(1, "0x", 2);
-		i = print_hex(va_arg(ap, unsigned int), &i, 'a') + 2;
+		i = print_ptr(va_arg(ap, void *), &i, 'a') + 2;
 	}
 	else
 		return (-1);
